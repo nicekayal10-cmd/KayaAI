@@ -1,0 +1,16 @@
+import Head from 'next/head';
+import Navbar from '../components/Navbar';
+import Tools from '../components/Tools';
+
+export default function Home() {
+  return (
+    <div>
+      <Head>
+        <title>Hamada.Kayal.AI</title>
+        <meta name="description" content="AI tools platform" />
+      </Head>
+      <Navbar />
+      <Tools />
+    </div>
+  );
+}

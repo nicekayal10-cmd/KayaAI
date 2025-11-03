@@ -1,0 +1,47 @@
+import { useState, useRef } from 'react';
+import axios from 'axios';
+
+export default function ChatAI() {
+  const [messages, setMessages] = useState([]);
+  const [input, setInput] = useState('');
+  const fileInput = useRef();
+
+  const sendMessage = async () => {
+    if (!input) return;
+    const newMsg = { text: input, user: true };
+    setMessages([...messages, newMsg]);
+    setInput('');
+    try {
+      const response = await axios.post('/api/chat', { message: input });
+      setMessages([...messages, newMsg, { text: response.data.reply, user: false }]);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleVoice = async () => { console.log('Voice input placeholder'); };
+  const handleCamera = async () => { console.log('Camera input placeholder'); };
+
+  return (
+    <div style={{ padding: '20px' }}>
+      <h3>شات AI نص/صوت/كاميرا</h3>
+      <div>
+        {messages.map((msg, idx) => (
+          <div key={idx} style={{ textAlign: msg.user ? 'right' : 'left' }}>
+            {msg.text}
+          </div>
+        ))}
+      </div>
+      <input
+        type="text"
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
+        placeholder="اكتب رسالتك هنا..."
+        style={{ width: '60%', padding: '10px' }}
+      />
+      <button onClick={sendMessage}>إرسال</button>
+      <button onClick={handleVoice}>مايك</button>
+      <button onClick={handleCamera}>كاميرا</button>
+    </div>
+  );
+}
